@@ -1,0 +1,27 @@
+package com.jsp.servlet;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
+ @Override
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	 Cookie[] cookies = req.getCookies();//You are getting all the cookies that the browser sent.
+	 
+//	 This is the main logout logic:
+	 for (int i = 0; i < cookies.length; i++) {
+		Cookie cookie = cookies[i];// You loop through each cookie.
+		cookie.setMaxAge(0);//		  You set its expiry time to 0, which means “delete it”.
+		resp.addCookie(cookie);//	  Then you add it back to the response so the browser removes it.
+	}
+	 resp.getWriter().println("<html><body><h1> You have Logged out</h1></body></html>");//This sends a message to the browser:
+	 req.getRequestDispatcher("login.jsp").include(req, resp);//This reloads the login page after showing the logout message.
+}
+}
+
